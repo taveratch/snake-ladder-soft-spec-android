@@ -15,6 +15,11 @@ public class BoardView extends View {
     private float cellSize;
     private float padding;
     private float playerSize;
+    private int colorP1 = Color.WHITE;
+    private int colorP2 = Color.BLACK;
+    private int colorBG = Color.parseColor("#6d8d46");
+    private int colorCell = Color.parseColor("#87aa4c");
+    private int colorText = Color.parseColor("#cfe8a6");
 
     // These variables will be used to keep track of what to render
     private int boardSize;
@@ -67,7 +72,9 @@ public class BoardView extends View {
 
     private void init() {
         boardSize = 1;
-        paint = new Paint();
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(20);
+        paint.setTextAlign(Paint.Align.CENTER);
     }
 
 
@@ -79,32 +86,35 @@ public class BoardView extends View {
     }
 
     private void drawBoard(Canvas canvas) {
-        paint.setColor(Color.LTGRAY);
+        paint.setColor(colorBG);
         canvas.drawRect(0, 0, viewWidth, viewWidth, paint);
     }
 
     private void drawSquares(Canvas canvas) {
 
-        paint.setColor(Color.GRAY);
         for(int i = 0; i < boardSize; i++) {
             for(int j = 0; j < boardSize; j++) {
                 float startX = i * cellSize + padding/2;
                 float startY = j * cellSize + padding/2;
                 float endX = startX + cellSize - padding;
                 float endY = startY + cellSize - padding;
+                paint.setColor(colorCell);
                 canvas.drawRect(startX, startY, endX, endY, paint);
+                paint.setColor(colorText);
+                String label = (j *  boardSize + i + 1) + "";
+                canvas.drawText(label, startX + cellSize/2 - padding/2, startY + cellSize/2, paint);
             }
         }
     }
 
     private void drawPlayerPieces(Canvas canvas) {
         // Draw player 1 (0.33 is the 1/3 position of the cell height)
-        paint.setColor(Color.YELLOW);
+        paint.setColor(colorP1);
         float p1X = positionToCol(p1Position) * cellSize + cellSize/2;
         float p1Y = positionToRow(p1Position) * cellSize + (cellSize * 0.33f);
         canvas.drawCircle(p1X, p1Y, playerSize, paint);
         // Draw player 2 (0.66 is the 2/3 position of the cell height)
-        paint.setColor(Color.GREEN);
+        paint.setColor(colorP2);
         float p2X = positionToCol(p2Position) * cellSize + cellSize/2;
         float p2Y = positionToRow(p2Position) * cellSize + (cellSize * 0.66f);
         canvas.drawCircle(p2X, p2Y, playerSize, paint);

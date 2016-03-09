@@ -22,7 +22,7 @@ public class GameActivity extends AppCompatActivity {
     private int turn;
 
     private BoardView boardView;
-    private Button buttonRoll;
+    private Button buttonTakeTurn;
     private Button buttonRestart;
     private TextView textPlayerTurn;
 
@@ -41,11 +41,11 @@ public class GameActivity extends AppCompatActivity {
 
     private void initComponents() {
         boardView = (BoardView) findViewById(R.id.board_view);
-        buttonRoll = (Button) findViewById(R.id.button_roll);
-        buttonRoll.setOnClickListener(new View.OnClickListener() {
+        buttonTakeTurn = (Button) findViewById(R.id.button_take_turn);
+        buttonTakeTurn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rollDice();
+                takeTurn();
             }
         });
         buttonRestart = (Button) findViewById(R.id.button_restart);
@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
         boardView.setP2Position(p2Position);
     }
 
-    private void rollDice() {
+    private void takeTurn() {
         final int value = 1 + new Random().nextInt(6);
         String title = "You rolled a die";
         String msg = "You got " + value;
@@ -82,15 +82,17 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void moveCurrentPiece(int value) {
-        turn++;
         if (turn % 2 == 0) {
             p1Position = adjustPosition(p1Position, value);
             boardView.setP1Position(p1Position);
+            textPlayerTurn.setText("Player 2's Turn");
         } else {
             p2Position = adjustPosition(p2Position, value);
             boardView.setP2Position(p2Position);
+            textPlayerTurn.setText("Player 1's Turn");
         }
         checkWin();
+        turn++;
     }
 
     private int adjustPosition(int current, int distance) {
