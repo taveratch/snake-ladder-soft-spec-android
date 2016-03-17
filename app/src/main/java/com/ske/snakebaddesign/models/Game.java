@@ -83,6 +83,7 @@ public class Game extends Observable{
         if(current > maxSquare) {
             current = maxSquare - (current - maxSquare);
         }
+        if(current < 0) current = 0;
         return current;
     }
 
