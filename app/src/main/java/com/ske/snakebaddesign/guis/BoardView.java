@@ -63,9 +63,9 @@ public class BoardView extends View {
         drawPlayerPieces(canvas);
     }
 
-    public void setBoardSize(int boardSize) {
-        this.boardSize = boardSize;
-        board = new Board(boardSize);
+    public void setBoard(Board board) {
+        this.board = board;
+        this.boardSize = board.getBoardSize();
         postInvalidate();
     }
 
@@ -96,17 +96,19 @@ public class BoardView extends View {
     }
 
     private void drawSquares(Canvas canvas) {
+        int count=0;
         for(int i = 0; i < boardSize; i++) {
             for(int j = 0; j < boardSize; j++) {
                 float startX = i * cellSize + padding/2;
                 float startY = j * cellSize + padding/2;
                 float endX = startX + cellSize - padding;
                 float endY = startY + cellSize - padding;
-                paint.setColor(board.getSquare(i,j).getColor());
+                paint.setColor(board.getSquare(j * boardSize + i).getColor());
                 canvas.drawRect(startX, startY, endX, endY, paint);
                 paint.setColor(colorText);
                 String label = (j *  boardSize + i + 1) + "";
                 canvas.drawText(label, startX + cellSize/2 - padding/2, startY + cellSize/2, paint);
+                count++;
             }
         }
     }

@@ -4,7 +4,7 @@
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/reset"
-        android:icon="@drawable/restart"
+        android:icon="@drawable/ic_refresh_white_24dp"
         android:title="Reset"
         app:showAsAction="ifRoom"/>
 

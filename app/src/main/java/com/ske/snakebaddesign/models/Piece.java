@@ -6,10 +6,13 @@ package com.ske.snakebaddesign.models;
 public class Piece {
     private int color;
     private int position;
+    private Square currentSquare;
     public Piece(int color){
         this.color = color;
         this.position = 0;
     }
+
+
 
     public int getColor() {
         return color;
@@ -25,5 +28,13 @@ public class Piece {
 
     public void reset(){
         this.position = 0;
+    }
+
+    public Square getCurrentSquare() {
+        return currentSquare;
+    }
+
+    public void setCurrentSquare(Square currentSquare) {
+        this.currentSquare = currentSquare;
     }
 }

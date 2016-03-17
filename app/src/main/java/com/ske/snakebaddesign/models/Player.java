@@ -4,7 +4,6 @@ package com.ske.snakebaddesign.models;
  * Created by TAWEESOFT on 3/15/16 AD.
  */
 public class Player {
-//    private String name;
     private static int NUMBER = 1;
     private int number;
     private Piece piece;
@@ -12,13 +11,7 @@ public class Player {
         this.number = NUMBER;
         piece = new Piece(color);
         NUMBER++;
-//        this.name = name;
     }
-
-//    public String getName() {
-//        return name;
-//    }
-
     public int getNumber() {
         return number;
     }
@@ -40,4 +33,12 @@ public class Player {
     }
 
     public static void clearRunner(){ NUMBER = 1; }
+
+    public void setSquare(Square square) {
+        piece.setCurrentSquare(square);
+    }
+
+    public Square getCurrentSquare() {
+        return piece.getCurrentSquare();
+    }
 }

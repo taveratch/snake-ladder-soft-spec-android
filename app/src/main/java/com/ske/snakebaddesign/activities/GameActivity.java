@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.ske.snakebaddesign.R;
 import com.ske.snakebaddesign.guis.BoardView;
 import com.ske.snakebaddesign.models.Game;
 import com.ske.snakebaddesign.models.Player;
+import com.ske.snakebaddesign.models.Question;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -45,8 +47,10 @@ public class GameActivity extends AppCompatActivity implements Observer {
     protected void onStart() {
         super.onStart();
 //        resetGame();
+        game = new Game(NUMBER_OF_PLAYERS,boardSize);
+        game.addObserver(this);
         boardView = (BoardView) findViewById(R.id.board_view);
-        boardView.setBoardSize(boardSize);
+        boardView.setBoard(game.getBoard());
     }
 
     private void initComponents() {
@@ -65,7 +69,7 @@ public class GameActivity extends AppCompatActivity implements Observer {
         game = new Game(NUMBER_OF_PLAYERS,boardSize);
         game.addObserver(this);
         game.reset();
-        boardView.setBoardSize(game.getBoardSize());
+        boardView.setBoard(game.getBoard());
         boardView.setComponents(game.getNumberOfPlayers(), game.getPlayerColors());
         initComponents();
         for(int i =0;i<game.getNumberOfPlayers();i++)
@@ -109,15 +113,39 @@ public class GameActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         if(data == null) return;
-        if(data.getClass() != Player.class) return;
-        final Player player = (Player)data;
-        OnClickListener listener = new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                moveCurrentPiece(player);
-                dialog.dismiss();
-            }
-        };
-        displayDialog("You rolled a die", "You got " + game.getDiceFace(), listener);
+        if(data.getClass() == Player.class) {
+            final Player player = (Player) data;
+            OnClickListener listener = new OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    moveCurrentPiece(player);
+                    dialog.dismiss();
+                }
+            };
+            displayDialog("You rolled a die", "You got " + game.getDiceFace(), listener);
+        }else if(data.getClass() == Question.class){
+            final Question question = (Question)data;
+            final Dialog dialog = new Dialog(this);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.question_dialog_layout);
+            TextView question_txt = (TextView)dialog.findViewById(R.id.question_txt);
+            question_txt.setText(question.getQuestion());
+            final EditText answer_txt = (EditText)dialog.findViewById(R.id.answer_txt);
+            Button submit_btn = (Button)dialog.findViewById(R.id.submit_btn);
+            submit_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int realAnswer = question.getAnswer();
+                    int answer = answer_txt.getText().length() == 0 ? 0 : Integer.parseInt(answer_txt.getText().toString());
+                    if(realAnswer == answer) dialog.dismiss();
+                    else {
+                        game.penalty();
+                        answer_txt.setText("");
+                        answer_txt.setHint("Wrong answer");
+                    }
+                }
+            });
+            dialog.show();
+        }
     }
 
     public void showChoosePlayerDialog(){

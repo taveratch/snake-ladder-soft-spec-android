@@ -7,7 +7,7 @@ import android.graphics.Color;
  */
 public class RedSquare implements Square {
 
-    private int color = Color.RED;
+    private int color = Color.parseColor("#e67e22");
 
     @Override
     public int getColor() {

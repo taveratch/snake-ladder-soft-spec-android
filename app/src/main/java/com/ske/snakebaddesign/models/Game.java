@@ -1,10 +1,12 @@
 package com.ske.snakebaddesign.models;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.Random;
 
 /**
  * Created by TAWEESOFT on 3/15/16 AD.
@@ -18,9 +20,15 @@ public class Game extends Observable{
     private DieCup dieCup;
     private int wonPlayer = -1;
     private int[] colors = {Color.RED , Color.BLACK , Color.WHITE , Color.YELLOW};
+    private Board board;
+    private QuestionGenerator questionGenerator;
     public Game(int numberOfPlayers,int boardSize){
         this.numberOfPlayers = numberOfPlayers;
         this.boardSize = boardSize;
+        questionGenerator = new QuestionGenerator(100);
+        questionGenerator.generateQuestion();
+        board = new Board(boardSize);
+        shuffleSquare();
         dieCup = new DieCup();
         AbstractDie normalDie = new Die();
         dieCup.addDie(normalDie);
@@ -41,12 +49,19 @@ public class Game extends Observable{
         turn %= numberOfPlayers;
         int oldPosition = player.getPosition();
         int face = dieCup.roll();
-        player.setPosition(adjustPosition(oldPosition,face));
+        movePlayer(player, face);
         setChanged();
         notifyObservers(player);
+        if(player.getCurrentSquare().getClass().equals(RedSquare.class)) {
+            setChanged();
+            notifyObservers(questionGenerator.getQuestions().get(new Random().nextInt(questionGenerator.getQuestions().size())));
+        }
     }
 
-
+    public void movePlayer(Player player , int value){
+        player.setPosition(adjustPosition(player.getPosition(),value));
+        player.setSquare(board.getSquare(player.getPosition()));
+    }
     public void reset(){
         for(Player player : players)
             player.reset();
@@ -97,6 +112,21 @@ public class Game extends Observable{
         return colors;
     }
 
+    public Square[] getAllSquare(){
+        return board.getAllSquare();
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+
+
+    public void penalty(){
+        Player player = players.get(turn == 0 ? numberOfPlayers-1 : turn-1 );
+        int value = dieCup.roll() * -1;
+        movePlayer(player,value);
+    }
 
 
 }
