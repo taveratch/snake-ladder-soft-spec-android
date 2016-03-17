@@ -17,6 +17,7 @@ public class Game extends Observable{
     private int turn =0;
     private DieCup dieCup;
     private int wonPlayer = -1;
+    private int[] colors = {Color.RED , Color.BLACK , Color.WHITE , Color.YELLOW};
     public Game(int numberOfPlayers,int boardSize){
         this.numberOfPlayers = numberOfPlayers;
         this.boardSize = boardSize;
@@ -24,10 +25,10 @@ public class Game extends Observable{
         AbstractDie normalDie = new Die();
         dieCup.addDie(normalDie);
         players = new ArrayList<>();
-        players.add(new Player(Color.BLACK));
-        players.add(new Player(Color.RED));
-//        players.add(new Player(Color.WHITE));
-//        players.add(new Player(Color.YELLOW));
+        Player.clearRunner();
+        for(int i =0 ;i<numberOfPlayers ; i++) {
+            players.add(new Player(colors[i]));
+        }
     }
 
     public int getNumberOfPlayers() {

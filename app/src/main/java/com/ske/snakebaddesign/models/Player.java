@@ -38,4 +38,6 @@ public class Player {
     public void reset(){
         piece.reset();
     }
+
+    public static void clearRunner(){ NUMBER = 1; }
 }

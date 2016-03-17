@@ -20,7 +20,7 @@ public class BoardView extends View {
     private float cellSize;
     private float padding;
     private float playerSize;
-    private int colorBG = Color.parseColor("#6d8d46");
+    private int colorBG = Color.parseColor("#16a085");
     private Board board;
     private int colorText = Color.parseColor("#cfe8a6");
     private int numberOfPlayer;

@@ -1,12 +1,18 @@
 package com.ske.snakebaddesign.activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ske.snakebaddesign.R;
@@ -21,49 +27,47 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity implements Observer {
 
     private BoardView boardView;
-    private Button buttonTakeTurn;
-    private Button buttonRestart;
+    private RelativeLayout buttonTakeTurn;
     private TextView textPlayerTurn;
     private Game game;
-    private final int NUMBER_OF_PLAYERS = 2;
+    private int NUMBER_OF_PLAYERS = 0;
+    private int boardSize = 6;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        game = new Game(NUMBER_OF_PLAYERS,4);
-        game.addObserver(this);
-        initComponents();
+        getSupportActionBar().setElevation(0);
+        showChoosePlayerDialog();
+//        initComponents();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        resetGame();
+//        resetGame();
+        boardView = (BoardView) findViewById(R.id.board_view);
+        boardView.setBoardSize(boardSize);
     }
 
     private void initComponents() {
-        boardView = (BoardView) findViewById(R.id.board_view);
-        boardView.setComponents(game.getNumberOfPlayers(),game.getPlayerColors());
-        buttonTakeTurn = (Button) findViewById(R.id.button_take_turn);
+        boardView.setComponents(game.getNumberOfPlayers(), game.getPlayerColors());
+        buttonTakeTurn = (RelativeLayout) findViewById(R.id.button_take_turn);
         buttonTakeTurn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 game.rollDice();
             }
         });
-        buttonRestart = (Button) findViewById(R.id.button_restart);
-        buttonRestart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resetGame();
-            }
-        });
         textPlayerTurn = (TextView) findViewById(R.id.text_player_turn);
     }
 
     private void resetGame() {
-        boardView.setBoardSize(game.getBoardSize());
+        game = new Game(NUMBER_OF_PLAYERS,boardSize);
+        game.addObserver(this);
         game.reset();
+        boardView.setBoardSize(game.getBoardSize());
+        boardView.setComponents(game.getNumberOfPlayers(), game.getPlayerColors());
+        initComponents();
         for(int i =0;i<game.getNumberOfPlayers();i++)
             boardView.setPosition(game.getPlayers().get(i));
         textPlayerTurn.setText("Player 1's Turn");
@@ -113,6 +117,57 @@ public class GameActivity extends AppCompatActivity implements Observer {
                 dialog.dismiss();
             }
         };
-        displayDialog("You rolled a die","You got " + game.getDiceFace(),listener);
+        displayDialog("You rolled a die", "You got " + game.getDiceFace(), listener);
+    }
+
+    public void showChoosePlayerDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.player_number_dialog_layout);
+        Button two_btn = (Button)dialog.findViewById(R.id.two_btn);
+        Button three_btn = (Button)dialog.findViewById(R.id.three_btn);
+        Button four_btn = (Button)dialog.findViewById(R.id.four_btn);
+        dialog.setCancelable(false);
+        two_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NUMBER_OF_PLAYERS = 2;
+                resetGame();
+                dialog.dismiss();
+            }
+        });
+
+        three_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NUMBER_OF_PLAYERS = 3;
+                resetGame();
+                dialog.dismiss();
+            }
+        });
+
+        four_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NUMBER_OF_PLAYERS = 4;
+                resetGame();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.reset)
+            showChoosePlayerDialog();
+        return super.onOptionsItemSelected(item);
     }
 }
