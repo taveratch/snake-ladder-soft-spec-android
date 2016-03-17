@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SnakeBadDesign.iml" filepath="$PROJECT_DIR$/SnakeBadDesign.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ske_snakebaddesign.iml" filepath="$PROJECT_DIR$/ske_snakebaddesign.iml" />
     </modules>
   </component>
 </project>
