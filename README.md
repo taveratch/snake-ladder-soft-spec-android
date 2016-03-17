@@ -20,3 +20,13 @@
 
 ### 5. Protected variations
   - AbstractDie is protects Die's information by using abstract-class.
+  
+----
+
+## Sequence Diagram
+
+### 1. take turn (play)
+![Alt text](http://taweesoft.xyz/work/soft_spec/images/Soft_Spec_SKE_Snake_SD1.png)
+
+### 2. reset
+![Alt text](http://taweesoft.xyz/work/soft_spec/images/Soft_Spec_SKE_Snake_SD2.png)
