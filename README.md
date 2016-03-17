@@ -23,6 +23,11 @@
 
 ### 6. Low coupling
   - GameActivity send number of players to Game and then Game create the Player. When Played has changed then it will not impact to GameActivity.
+  
+### 7. High cohesion (Focus in the thing that it shoudl doing)
+  - Die (roll)
+  - Piece (set and get position)
+
 ----
 
 ## Sequence Diagram
