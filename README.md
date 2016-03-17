@@ -21,6 +21,10 @@
 ### 5. Protected variations
   - AbstractDie is protects Die's information by using abstract-class.
   
+### 6. High cohesion (Focus in the thing that it shoudl doing)
+  - Die (roll)
+  - Piece (set and get position)
+  
 ----
 
 ## Sequence Diagram
