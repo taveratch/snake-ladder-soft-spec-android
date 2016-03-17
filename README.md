@@ -28,6 +28,9 @@
   - Die (roll)
   - Piece (set and get position)
 
+### 8. Pure fabrication
+  - DieCup should sum the total of face from dice.
+
 ----
 
 ## Sequence Diagram
