@@ -21,14 +21,16 @@ public class Game extends Observable{
     private int wonPlayer = -1;
     private int[] colors = {Color.RED , Color.BLACK , Color.WHITE , Color.YELLOW};
     private Board board;
+    private boolean isEnd;
     private QuestionGenerator questionGenerator;
     public Game(int numberOfPlayers,int boardSize){
         this.numberOfPlayers = numberOfPlayers;
         this.boardSize = boardSize;
+        isEnd = false;
         questionGenerator = new QuestionGenerator(100);
         questionGenerator.generateQuestion();
         board = new Board(boardSize);
-        shuffleSquare();
+        board.shuffleSquare();
         dieCup = new DieCup();
         AbstractDie normalDie = new Die();
         dieCup.addDie(normalDie);
@@ -50,6 +52,7 @@ public class Game extends Observable{
         int oldPosition = player.getPosition();
         int face = dieCup.roll();
         movePlayer(player, face);
+        checkEnd(player);
         setChanged();
         notifyObservers(player);
         if(player.getCurrentSquare().getClass().equals(RedSquare.class)) {
@@ -88,12 +91,7 @@ public class Game extends Observable{
     }
 
     public boolean isEnd(){
-        for(Player player : players)
-            if(player.getPosition() == boardSize * boardSize - 1){
-                wonPlayer = player.getNumber()-1;
-                return true;
-            }
-        return false;
+        return isEnd;
     }
 
     public Player getWinner(){
@@ -120,7 +118,11 @@ public class Game extends Observable{
         return board;
     }
 
-
+    public void checkEnd(Player player) {
+        int lastSquare = boardSize*boardSize -1;
+        isEnd = player.getPosition() == lastSquare;
+        if(isEnd()) wonPlayer = player.getNumber()-1;
+    }
 
     public void penalty(){
         Player player = players.get(turn == 0 ? numberOfPlayers-1 : turn-1 );

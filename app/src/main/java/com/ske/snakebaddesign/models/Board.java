@@ -42,6 +42,6 @@ public class Board {
         for(int i=0;i<boardSize*boardSize;i++)
             squares[i] = new NormalSquare();
         for(int i=0 ; i<boardSize ;i++)
-            board.getAllSquare()[randoms[i]] = new RedSquare();
+            squares[randoms[i]] = new RedSquare();
     }
 }
